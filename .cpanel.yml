@@ -1,5 +1,5 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/agustinguanipa/public_html/
+    - export DEPLOYPATH=/home/agustinguanipa/graceandshineservices.com/
     - /bin/cp -R dist/* $DEPLOYPATH
