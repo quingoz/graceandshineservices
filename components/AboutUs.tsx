@@ -82,10 +82,10 @@ export default function AboutUs({ language }: AboutUsProps) {
         {/* Section Header */}
         <motion.div
           className="text-center mb-16"
-          initial={{ y: 20, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.3 }}
         >
           <h2 className="font-montserrat text-4xl md:text-5xl font-bold text-primary mb-4">
             {t.title}
@@ -98,12 +98,12 @@ export default function AboutUs({ language }: AboutUsProps) {
           className="grid md:grid-cols-2 gap-8 mb-16"
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true, amount: 0.2 }}
           variants={{
             hidden: {},
             visible: {
               transition: {
-                staggerChildren: 0.2,
+                staggerChildren: 0.08,
               },
             },
           }}
@@ -111,11 +111,11 @@ export default function AboutUs({ language }: AboutUsProps) {
           {/* Grace */}
           <motion.div
             variants={{
-              hidden: { y: 20, opacity: 0 },
-              visible: { y: 0, opacity: 1 },
+              hidden: { opacity: 0 },
+              visible: { opacity: 1 },
             }}
-            transition={{ duration: 0.5 }}
-            className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-2xl p-8 border-l-4 border-accent hover:border-sky-400 hover:scale-[1.01] transition-all duration-300"
+            transition={{ duration: 0.3 }}
+            className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-2xl p-8 border-l-4 border-accent hover:border-sky-400 hover:scale-[1.01] transition-all duration-200"
           >
             <div className="flex items-center gap-3 mb-4">
               <Heart className="w-8 h-8 text-accent" />
@@ -129,11 +129,11 @@ export default function AboutUs({ language }: AboutUsProps) {
           {/* Shine */}
           <motion.div
             variants={{
-              hidden: { y: 20, opacity: 0 },
-              visible: { y: 0, opacity: 1 },
+              hidden: { opacity: 0 },
+              visible: { opacity: 1 },
             }}
-            transition={{ duration: 0.5 }}
-            className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-2xl p-8 border-l-4 border-accent hover:border-sky-400 hover:scale-[1.01] transition-all duration-300"
+            transition={{ duration: 0.3 }}
+            className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-2xl p-8 border-l-4 border-accent hover:border-sky-400 hover:scale-[1.01] transition-all duration-200"
           >
             <div className="flex items-center gap-3 mb-4">
               <Sparkles className="w-8 h-8 text-accent" />
@@ -150,12 +150,12 @@ export default function AboutUs({ language }: AboutUsProps) {
           className="grid lg:grid-cols-2 gap-12 items-center mb-16"
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true, amount: 0.2 }}
           variants={{
             hidden: {},
             visible: {
               transition: {
-                staggerChildren: 0.2,
+                staggerChildren: 0.08,
               },
             },
           }}
@@ -163,10 +163,10 @@ export default function AboutUs({ language }: AboutUsProps) {
           {/* Image with Gold Accent Frame */}
           <motion.div
             variants={{
-              hidden: { y: 20, opacity: 0 },
-              visible: { y: 0, opacity: 1 },
+              hidden: { opacity: 0 },
+              visible: { opacity: 1 },
             }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.3 }}
             className="order-2 lg:order-1"
           >
             <div className="relative group">
@@ -181,6 +181,7 @@ export default function AboutUs({ language }: AboutUsProps) {
                   fill
                   className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 50vw"
+                  loading="lazy"
                 />
               </div>
 
@@ -195,10 +196,10 @@ export default function AboutUs({ language }: AboutUsProps) {
           {/* Text Content */}
           <motion.div
             variants={{
-              hidden: { y: 20, opacity: 0 },
-              visible: { y: 0, opacity: 1 },
+              hidden: { opacity: 0 },
+              visible: { opacity: 1 },
             }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.3 }}
             className="order-1 lg:order-2"
           >
             <h3 className="font-montserrat text-2xl md:text-3xl font-semibold text-accent mb-4">
@@ -215,12 +216,12 @@ export default function AboutUs({ language }: AboutUsProps) {
           className="grid md:grid-cols-2 gap-8 mb-16"
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true, amount: 0.2 }}
           variants={{
             hidden: {},
             visible: {
               transition: {
-                staggerChildren: 0.2,
+                staggerChildren: 0.08,
               },
             },
           }}
@@ -228,10 +229,10 @@ export default function AboutUs({ language }: AboutUsProps) {
           {/* Mission */}
           <motion.div
             variants={{
-              hidden: { y: 20, opacity: 0 },
-              visible: { y: 0, opacity: 1 },
+              hidden: { opacity: 0 },
+              visible: { opacity: 1 },
             }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.3 }}
             className="bg-white rounded-2xl p-8 shadow-lg border border-accent/20 hover:border-sky-400 hover:shadow-xl transition-all hover:scale-[1.01]"
           >
             <div className="flex items-center gap-3 mb-4">
@@ -246,10 +247,10 @@ export default function AboutUs({ language }: AboutUsProps) {
           {/* Vision */}
           <motion.div
             variants={{
-              hidden: { y: 20, opacity: 0 },
-              visible: { y: 0, opacity: 1 },
+              hidden: { opacity: 0 },
+              visible: { opacity: 1 },
             }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.3 }}
             className="bg-white rounded-2xl p-8 shadow-lg border border-accent/20 hover:border-sky-400 hover:shadow-xl transition-all hover:scale-[1.01]"
           >
             <div className="flex items-center gap-3 mb-4">
@@ -266,7 +267,7 @@ export default function AboutUs({ language }: AboutUsProps) {
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true, amount: 0.2 }}
         >
           <h3 className="font-montserrat text-3xl font-bold text-primary text-center mb-8">
             {t.values.title}
@@ -290,7 +291,7 @@ export default function AboutUs({ language }: AboutUsProps) {
                   visible: { y: 0, opacity: 1 },
                 }}
                 transition={{ duration: 0.5 }}
-                className="bg-white rounded-xl p-6 shadow-md border-2 border-accent/30 hover:border-amber-400/40 hover:shadow-lg transition-all duration-300 text-center group hover:scale-[1.01]"
+                className="bg-white rounded-xl p-6 shadow-md border-2 border-accent/30 hover:border-amber-400/40 hover:shadow-lg transition-all duration-200 text-center group hover:scale-[1.01]"
               >
                 <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-accent/20 transition-colors">
                   <value.icon className="w-6 h-6 text-primary group-hover:text-accent transition-colors" />

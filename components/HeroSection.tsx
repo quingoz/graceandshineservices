@@ -35,17 +35,18 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.15,
+      staggerChildren: 0.08,
+      delayChildren: 0.1,
     },
   },
 };
 
 const itemVariants = {
-  hidden: { y: 20, opacity: 0 },
+  hidden: { y: 10, opacity: 0 },
   visible: {
     y: 0,
     opacity: 1,
-    transition: { duration: 0.5, ease: "easeOut" },
+    transition: { duration: 0.3, ease: "easeOut" },
   },
 };
 
@@ -75,8 +76,7 @@ export default function HeroSection({ language }: HeroSectionProps) {
           <motion.div
             className="text-white"
             initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
+            animate="visible"
             variants={containerVariants}
           >
             {/* Stars */}
@@ -132,10 +132,9 @@ export default function HeroSection({ language }: HeroSectionProps) {
           <motion.div
             id="quote-form"
             className="lg:mt-0 mt-8"
-            initial={{ y: 20, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
+            initial={{ y: 10, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.4, delay: 0.2, ease: "easeOut" }}
           >
             <QuickQuoteForm language={language} />
           </motion.div>

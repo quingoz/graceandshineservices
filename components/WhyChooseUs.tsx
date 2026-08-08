@@ -79,10 +79,10 @@ export default function WhyChooseUs({ language }: WhyChooseUsProps) {
         {/* Section Header */}
         <motion.div
           className="text-center mb-16"
-          initial={{ y: 20, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.3 }}
         >
           <h2 className="font-montserrat text-4xl md:text-5xl font-bold mb-4">
             {t.title}
@@ -98,12 +98,12 @@ export default function WhyChooseUs({ language }: WhyChooseUsProps) {
           className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true, amount: 0.2 }}
           variants={{
             hidden: {},
             visible: {
               transition: {
-                staggerChildren: 0.1,
+                staggerChildren: 0.05,
               },
             },
           }}
@@ -112,11 +112,11 @@ export default function WhyChooseUs({ language }: WhyChooseUsProps) {
             <motion.div
               key={index}
               variants={{
-                hidden: { y: 20, opacity: 0 },
-                visible: { y: 0, opacity: 1 },
+                hidden: { opacity: 0 },
+                visible: { opacity: 1 },
               }}
-              transition={{ duration: 0.5 }}
-              className={`relative rounded-2xl p-8 transition-all duration-300 ${
+              transition={{ duration: 0.3 }}
+              className={`relative rounded-2xl p-8 transition-all duration-200 ${
                 reason.highlighted
                   ? "bg-gradient-to-br from-accent to-accent-dark text-primary-dark shadow-2xl transform scale-105 border-4 border-white/30"
                   : "bg-white/10 backdrop-blur-sm hover:bg-white/20 border border-white/20 hover:border-amber-400/40 hover:scale-[1.01]"
@@ -175,7 +175,7 @@ export default function WhyChooseUs({ language }: WhyChooseUsProps) {
           className="mt-20 grid lg:grid-cols-2 gap-8 items-center"
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true, amount: 0.2 }}
           variants={{
             hidden: {},
             visible: {
@@ -198,7 +198,8 @@ export default function WhyChooseUs({ language }: WhyChooseUsProps) {
               src="/before-after.jpg"
               alt={t.beforeAfterAlt}
               fill
-              className="object-cover transition-transform duration-700 group-hover:scale-105"
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              loading="lazy"
               sizes="(max-width: 1024px) 100vw, 50vw"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/40 to-transparent" />

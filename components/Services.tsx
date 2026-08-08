@@ -105,10 +105,10 @@ export default function Services({ language }: ServicesProps) {
         {/* Section Header */}
         <motion.div
           className="text-center mb-16"
-          initial={{ y: 20, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.3 }}
         >
           <h2 className="font-montserrat text-4xl md:text-5xl font-bold text-primary mb-4">
             {t.title}
@@ -124,12 +124,12 @@ export default function Services({ language }: ServicesProps) {
           className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true, amount: 0.1 }}
           variants={{
             hidden: {},
             visible: {
               transition: {
-                staggerChildren: 0.1,
+                staggerChildren: 0.05,
               },
             },
           }}
@@ -138,11 +138,11 @@ export default function Services({ language }: ServicesProps) {
             <motion.div
               key={index}
               variants={{
-                hidden: { y: 20, opacity: 0 },
-                visible: { y: 0, opacity: 1 },
+                hidden: { opacity: 0 },
+                visible: { opacity: 1 },
               }}
-              transition={{ duration: 0.5 }}
-              className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.01] border-2 border-transparent hover:border-sky-400 cursor-pointer group overflow-hidden"
+              transition={{ duration: 0.3 }}
+              className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-200 hover:scale-[1.02] border-2 border-transparent hover:border-sky-400 cursor-pointer group overflow-hidden"
               onMouseEnter={() => setHoveredService(index)}
               onMouseLeave={() => setHoveredService(null)}
             >
@@ -152,8 +152,9 @@ export default function Services({ language }: ServicesProps) {
                   src={service.image}
                   alt={service.title}
                   fill
-                  className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  className="object-cover transition-transform duration-200 group-hover:scale-105"
                   sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                  loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-primary/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </div>
@@ -161,7 +162,7 @@ export default function Services({ language }: ServicesProps) {
               {/* Content */}
               <div className="p-6">
                 {/* Icon */}
-                <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${service.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
+                <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${service.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200`}>
                   <service.icon className="w-8 h-8 text-white" />
                 </div>
 
