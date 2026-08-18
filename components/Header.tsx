@@ -71,40 +71,40 @@ export default function Header({ language, setLanguage, onGetEstimate }: HeaderP
   ];
 
   return (
-    <>
-      {/* Language Toggle */}
-      <div className="fixed top-4 right-4 z-50">
-        <button
-          onClick={toggleLanguage}
-          className="flex items-center gap-2 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg hover:bg-white transition-colors border border-accent/20"
-          aria-label="Toggle language"
-        >
-          <Globe className="w-4 h-4 text-primary" />
-          <span className="text-sm font-medium text-primary">{language === "en" ? "ES" : "EN"}</span>
-        </button>
-      </div>
-
-      <header className={`sticky top-0 z-50 transition-all duration-300 ${
+    <header className={`sticky top-0 z-50 transition-all duration-300 ${
       isScrolled 
         ? "bg-white/90 backdrop-blur-md shadow-lg" 
         : "bg-white shadow-md"
     }`}>
       {/* Top Bar */}
       <div className="bg-primary text-white py-2">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2 text-sm">
-          <div className="flex items-center gap-4">
-            <a href="tel:7043097024" className="flex items-center gap-2 hover:text-accent transition-colors">
-              <Phone className="w-4 h-4" />
+        <div className="max-w-7xl mx-auto px-4 flex items-center justify-between gap-3 text-xs sm:text-sm">
+          {/* Contact Info */}
+          <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+            <a href="tel:7043097024" className="flex items-center gap-1.5 hover:text-accent transition-colors whitespace-nowrap flex-shrink-0">
+              <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" />
               <span>(704) 309-7024</span>
             </a>
-            <a href="mailto:graceandshineservice@gmail.com" className="flex items-center gap-2 hover:text-accent transition-colors">
-              <Mail className="w-4 h-4" />
-              <span>graceandshineservice@gmail.com</span>
+            <a href="mailto:graceandshineservice@gmail.com" className="hidden md:flex items-center gap-2 hover:text-accent transition-colors min-w-0">
+              <Mail className="w-4 h-4 flex-shrink-0" />
+              <span className="truncate">graceandshineservice@gmail.com</span>
             </a>
           </div>
-          <div className="flex items-center gap-2 text-accent">
-            <Shield className="w-4 h-4" />
-            <span className="font-medium">{t.badges.insured}</span>
+
+          {/* Badge + Language Toggle */}
+          <div className="flex items-center gap-3 sm:gap-4 flex-shrink-0">
+            <div className="hidden sm:flex items-center gap-2 text-accent whitespace-nowrap">
+              <Shield className="w-4 h-4 flex-shrink-0" />
+              <span className="font-medium">{t.badges.insured}</span>
+            </div>
+            <button
+              onClick={toggleLanguage}
+              className="flex items-center gap-1 bg-white/10 hover:bg-white/20 px-2.5 py-1 rounded-full transition-colors border border-white/20 flex-shrink-0"
+              aria-label="Toggle language"
+            >
+              <Globe className="w-3.5 h-3.5" />
+              <span className="text-xs font-semibold">{language === "en" ? "ES" : "EN"}</span>
+            </button>
           </div>
         </div>
       </div>
@@ -187,6 +187,5 @@ export default function Header({ language, setLanguage, onGetEstimate }: HeaderP
         )}
       </div>
     </header>
-    </>
   );
 }
