@@ -18,7 +18,7 @@ const translations = {
     graceMeaning: "God's grace, kindness, and integrity in everything we do",
     shine: '"Shine"',
     shineMeaning: "Beauty, freshness, and brightness in every space we touch",
-    story: "Grace and Shine Cleaning & Maintenance Services is a family-owned business dedicated to bringing excellence to every home and business we serve. Our name reflects our commitment to treating every client with grace and leaving every space shining.",
+    story: "Grace and Shine Cleaning & Maintenance Services was founded from the dream of an immigrant family who came to the United States with the hope of building a better future through honest work, perseverance, and faith in God. Like many families starting a new life in a different country, we faced many challenges—adapting to a new culture, learning new ways of working, and building a business from the ground up. Every challenge strengthened our commitment to grow with integrity, responsibility, and excellence. What began as an opportunity to create a better future soon became a family-owned cleaning and maintenance company dedicated to delivering high-quality service. From the very beginning, we understood that cleaning is about much more than appearance; it is about providing peace of mind, building trust, and creating spaces where people feel comfortable and at home. Every home, apartment, and business we serve is treated with the same care and respect we would give our own. We believe excellence is found in the smallest details and that trust is earned through quality work, reliability, punctuality, and kindness. Our name, Grace and Shine, reflects the values that inspire us every day. Grace represents our commitment to serving others with humility, honesty, and respect. Shine reflects our dedication to excellence and our promise to leave every space spotless, allowing our work to speak for itself. Today, we are deeply grateful for every client who has placed their trust in us. Because of that trust, we continue to grow while staying true to our roots and the values on which we built our business. More than providing cleaning services, our mission is to reflect quality, commitment, and the value of work done with care and dedication. Because we believe every new beginning deserves a clean, well-cared-for space filled with hope.",
     mission: {
       title: "Our Mission",
       description: "To provide exceptional cleaning and maintenance services that exceed expectations, creating clean, healthy, and beautiful spaces for our clients.",
@@ -67,6 +67,10 @@ const translations = {
 
 export default function AboutUs({ language }: AboutUsProps) {
   const t = translations[language];
+
+  const sentences = t.story.split(". ");
+  const storyIntro = sentences.slice(0, 4).join(". ") + ".";
+  const storyRest = sentences.slice(4).join(". ");
 
   const values = [
     { icon: Shield, label: t.values.integrity },
@@ -206,32 +210,25 @@ export default function AboutUs({ language }: AboutUsProps) {
               {t.subtitle}
             </h3>
             <p className="text-lg text-neutral leading-relaxed">
-              {t.story}
+              {storyIntro}
             </p>
           </motion.div>
         </motion.div>
 
+        {/* Rest of the Story */}
+        <div className="max-w-5xl mx-auto mt-16">
+          <p className="text-lg text-neutral leading-relaxed">
+            {storyRest}
+          </p>
+        </div>
+
         {/* Mission & Vision */}
-        <motion.div 
-          className="grid md:grid-cols-2 gap-8 mb-16"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          variants={{
-            hidden: {},
-            visible: {
-              transition: {
-                staggerChildren: 0.08,
-              },
-            },
-          }}
-        >
+        <div className="grid md:grid-cols-2 gap-8 mb-16">
           {/* Mission */}
           <motion.div
-            variants={{
-              hidden: { opacity: 0 },
-              visible: { opacity: 1 },
-            }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true, amount: 0.1 }}
             transition={{ duration: 0.3 }}
             className="bg-white rounded-2xl p-8 shadow-lg border border-accent/20 hover:border-sky-400 hover:shadow-xl transition-all hover:scale-[1.01]"
           >
@@ -246,10 +243,9 @@ export default function AboutUs({ language }: AboutUsProps) {
 
           {/* Vision */}
           <motion.div
-            variants={{
-              hidden: { opacity: 0 },
-              visible: { opacity: 1 },
-            }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true, amount: 0.1 }}
             transition={{ duration: 0.3 }}
             className="bg-white rounded-2xl p-8 shadow-lg border border-accent/20 hover:border-sky-400 hover:shadow-xl transition-all hover:scale-[1.01]"
           >
@@ -261,7 +257,7 @@ export default function AboutUs({ language }: AboutUsProps) {
             </div>
             <p className="text-neutral">{t.vision.description}</p>
           </motion.div>
-        </motion.div>
+        </div>
 
         {/* Values */}
         <motion.div

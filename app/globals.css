@@ -8,13 +8,11 @@
   --background-end-rgb: 255, 255, 255;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
+/* This site uses a fixed light theme regardless of the visitor's OS/browser
+   color-scheme preference, so we intentionally do not override these
+   variables in a `prefers-color-scheme: dark` media query. Doing so
+   previously caused white text on white backgrounds (e.g. form inputs)
+   for visitors with dark mode enabled. */
 
 html {
   scroll-behavior: smooth;

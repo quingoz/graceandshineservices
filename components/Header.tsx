@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { Phone, Mail, Shield, Menu, X, ChevronDown } from "lucide-react";
+import { Phone, Mail, Shield, Menu, X, ChevronDown, Globe } from "lucide-react";
 
 type Language = "en" | "es";
 
@@ -48,6 +48,10 @@ export default function Header({ language, setLanguage, onGetEstimate }: HeaderP
   const [isScrolled, setIsScrolled] = useState(false);
   const t = translations[language];
 
+  const toggleLanguage = () => {
+    setLanguage(language === "en" ? "es" : "en");
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
@@ -58,16 +62,29 @@ export default function Header({ language, setLanguage, onGetEstimate }: HeaderP
   }, []);
 
   const navItems = [
-    { key: "home", label: t.nav.home },
-    { key: "about", label: t.nav.about },
-    { key: "services", label: t.nav.services },
-    { key: "areas", label: t.nav.areas },
-    { key: "faq", label: t.nav.faq },
-    { key: "contact", label: t.nav.contact },
+    { label: t.nav.home, href: "/" },
+    { label: t.nav.about, href: "/about/" },
+    { label: t.nav.services, href: "/services/" },
+    { label: t.nav.areas, href: "/service-areas/" },
+    { label: t.nav.faq, href: "/faq/" },
+    { label: t.nav.contact, href: "/contact/" },
   ];
 
   return (
-    <header className={`sticky top-0 z-50 transition-all duration-300 ${
+    <>
+      {/* Language Toggle */}
+      <div className="fixed top-4 right-4 z-50">
+        <button
+          onClick={toggleLanguage}
+          className="flex items-center gap-2 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg hover:bg-white transition-colors border border-accent/20"
+          aria-label="Toggle language"
+        >
+          <Globe className="w-4 h-4 text-primary" />
+          <span className="text-sm font-medium text-primary">{language === "en" ? "ES" : "EN"}</span>
+        </button>
+      </div>
+
+      <header className={`sticky top-0 z-50 transition-all duration-300 ${
       isScrolled 
         ? "bg-white/90 backdrop-blur-md shadow-lg" 
         : "bg-white shadow-md"
@@ -113,8 +130,8 @@ export default function Header({ language, setLanguage, onGetEstimate }: HeaderP
           <nav className="hidden lg:flex items-center gap-8">
             {navItems.map((item) => (
               <a
-                key={item.key}
-                href={`#${item.key}`}
+                key={item.href}
+                href={item.href}
                 className="text-neutral hover:text-primary transition-colors font-medium"
               >
                 {item.label}
@@ -148,8 +165,8 @@ export default function Header({ language, setLanguage, onGetEstimate }: HeaderP
             <div className="flex flex-col gap-4">
               {navItems.map((item) => (
                 <a
-                  key={item.key}
-                  href={`#${item.key}`}
+                  key={item.href}
+                  href={item.href}
                   className="text-neutral hover:text-primary transition-colors font-medium py-2"
                   onClick={() => setIsMenuOpen(false)}
                 >
@@ -170,5 +187,6 @@ export default function Header({ language, setLanguage, onGetEstimate }: HeaderP
         )}
       </div>
     </header>
+    </>
   );
 }

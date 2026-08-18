@@ -20,19 +20,27 @@ const translations = {
       email: "Email Address",
       service: "Service Type",
       zip: "Zip Code",
+      squareFootage: "Approximate Square Footage",
     },
     serviceOptions: {
       residential: "Residential Cleaning",
+      deep: "Deep Cleaning",
       commercial: "Commercial Cleaning",
-      moveInOut: "Move-In/Out Cleaning",
-      condo: "Condo/Maintenance",
+      office: "Office Cleaning",
+      moveInOut: "Move-In / Move-Out Cleaning",
+      postConstruction: "Post-Construction Cleaning",
+      condo: "Apartment & Condominium Cleaning",
+      maintenance: "Property Maintenance",
     },
     button: "Request Free Quote",
     success: "Thank you! We'll contact you within 24 hours.",
+    submitError: "Something went wrong sending your request. Please call us at (704) 309-7024 or try again.",
     errors: {
       required: "This field is required",
-      email: "Please enter a valid email",
-      phone: "Please enter a valid phone number",
+      email: "Please enter a valid email address",
+      phone: "Please enter a valid 10-digit phone number",
+      zip: "Please enter a valid 5-digit zip code",
+      squareFootage: "Please enter a valid square footage",
     },
   },
   es: {
@@ -44,22 +52,40 @@ const translations = {
       email: "Correo Electrónico",
       service: "Tipo de Servicio",
       zip: "Código Postal",
+      squareFootage: "Pies Cuadrados Aproximados",
     },
     serviceOptions: {
       residential: "Limpieza Residencial",
+      deep: "Limpieza Profunda",
       commercial: "Limpieza Comercial",
-      moveInOut: "Limpieza de Mudanza",
-      condo: "Condominio/Mantenimiento",
+      office: "Limpieza de Oficinas",
+      moveInOut: "Limpieza de Mudanza (Move-In/Out)",
+      postConstruction: "Limpieza Post-Construcción",
+      condo: "Limpieza de Apartamentos y Condominios",
+      maintenance: "Mantenimiento de Propiedades",
     },
     button: "Solicitar Cotización Gratis",
     success: "¡Gracias! Nos pondremos en contacto en 24 horas.",
+    submitError: "Ocurrió un error al enviar su solicitud. Por favor llámenos al (704) 309-7024 o intente de nuevo.",
     errors: {
       required: "Este campo es requerido",
-      email: "Por favor ingrese un email válido",
-      phone: "Por favor ingrese un número de teléfono válido",
+      email: "Por favor ingrese un correo electrónico válido",
+      phone: "Por favor ingrese un número de teléfono válido de 10 dígitos",
+      zip: "Por favor ingrese un código postal válido de 5 dígitos",
+      squareFootage: "Por favor ingrese pies cuadrados válidos",
     },
   },
 };
+
+function formatPhoneNumber(value: string) {
+  const digits = value.replace(/\D/g, "").slice(0, 10);
+  const length = digits.length;
+
+  if (length === 0) return "";
+  if (length < 4) return `(${digits}`;
+  if (length < 7) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+  return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+}
 
 export default function QuickQuoteForm({ language }: QuickQuoteFormProps) {
   const t = translations[language];
@@ -69,10 +95,13 @@ export default function QuickQuoteForm({ language }: QuickQuoteFormProps) {
     email: "",
     service: "",
     zip: "",
+    squareFootage: "",
+    website: "", // honeypot field, kept empty and hidden from real visitors
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -89,7 +118,16 @@ export default function QuickQuoteForm({ language }: QuickQuoteFormProps) {
       newErrors.email = t.errors.email;
     }
     if (!formData.service) newErrors.service = t.errors.required;
-    if (!formData.zip.trim()) newErrors.zip = t.errors.required;
+    if (!formData.zip.trim()) {
+      newErrors.zip = t.errors.required;
+    } else if (!/^\d{5}$/.test(formData.zip)) {
+      newErrors.zip = t.errors.zip;
+    }
+    if (!formData.squareFootage.trim()) {
+      newErrors.squareFootage = t.errors.required;
+    } else if (!/^\d+$/.test(formData.squareFootage) || parseInt(formData.squareFootage, 10) <= 0) {
+      newErrors.squareFootage = t.errors.squareFootage;
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -101,23 +139,51 @@ export default function QuickQuoteForm({ language }: QuickQuoteFormProps) {
     if (!validateForm()) return;
 
     setIsSubmitting(true);
+    setSubmitError(false);
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      const response = await fetch("/send-quote.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...formData, language }),
+      });
 
-    setIsSubmitted(true);
-    setIsSubmitting(false);
+      if (!response.ok) {
+        throw new Error("Request failed");
+      }
 
-    // Reset form after 3 seconds
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setFormData({ name: "", phone: "", email: "", service: "", zip: "" });
-    }, 3000);
+      const data = await response.json();
+      if (!data.success) {
+        throw new Error(data.message || "Request failed");
+      }
+
+      setIsSubmitted(true);
+
+      // Reset form after 3 seconds
+      setTimeout(() => {
+        setIsSubmitted(false);
+        setFormData({ name: "", phone: "", email: "", service: "", zip: "", squareFootage: "", website: "" });
+      }, 3000);
+    } catch {
+      setSubmitError(true);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    let newValue = value;
+
+    if (name === "phone") {
+      newValue = formatPhoneNumber(value);
+    } else if (name === "zip") {
+      newValue = value.replace(/\D/g, "").slice(0, 5);
+    } else if (name === "squareFootage") {
+      newValue = value.replace(/\D/g, "").slice(0, 6);
+    }
+
+    setFormData((prev) => ({ ...prev, [name]: newValue }));
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
@@ -153,6 +219,18 @@ export default function QuickQuoteForm({ language }: QuickQuoteFormProps) {
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Honeypot field - hidden from real visitors, helps deter spam bots */}
+        <input
+          type="text"
+          name="website"
+          value={formData.website}
+          onChange={handleChange}
+          tabIndex={-1}
+          autoComplete="off"
+          className="hidden"
+          aria-hidden="true"
+        />
+
         {/* Name */}
         <div>
           <label htmlFor="name" className="block text-sm font-medium text-neutral mb-1">
@@ -164,7 +242,7 @@ export default function QuickQuoteForm({ language }: QuickQuoteFormProps) {
             name="name"
             value={formData.name}
             onChange={handleChange}
-            className={`w-full px-4 py-3 rounded-lg border ${
+            className={`w-full px-4 py-3 rounded-lg border bg-white text-neutral-dark placeholder:text-neutral-light ${
               errors.name ? "border-red-500" : "border-neutral-light"
             } focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all`}
             placeholder={t.fields.name}
@@ -181,9 +259,11 @@ export default function QuickQuoteForm({ language }: QuickQuoteFormProps) {
             type="tel"
             id="phone"
             name="phone"
+            inputMode="tel"
+            autoComplete="tel"
             value={formData.phone}
             onChange={handleChange}
-            className={`w-full px-4 py-3 rounded-lg border ${
+            className={`w-full px-4 py-3 rounded-lg border bg-white text-neutral-dark placeholder:text-neutral-light ${
               errors.phone ? "border-red-500" : "border-neutral-light"
             } focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all`}
             placeholder="(704) 555-1234"
@@ -200,9 +280,11 @@ export default function QuickQuoteForm({ language }: QuickQuoteFormProps) {
             type="email"
             id="email"
             name="email"
+            inputMode="email"
+            autoComplete="email"
             value={formData.email}
             onChange={handleChange}
-            className={`w-full px-4 py-3 rounded-lg border ${
+            className={`w-full px-4 py-3 rounded-lg border bg-white text-neutral-dark placeholder:text-neutral-light ${
               errors.email ? "border-red-500" : "border-neutral-light"
             } focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all`}
             placeholder="your@email.com"
@@ -220,15 +302,19 @@ export default function QuickQuoteForm({ language }: QuickQuoteFormProps) {
             name="service"
             value={formData.service}
             onChange={handleChange}
-            className={`w-full px-4 py-3 rounded-lg border ${
+            className={`w-full px-4 py-3 rounded-lg border bg-white text-neutral-dark ${
               errors.service ? "border-red-500" : "border-neutral-light"
-            } focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-white`}
+            } focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all`}
           >
             <option value="">{t.fields.service}</option>
             <option value="residential">{t.serviceOptions.residential}</option>
+            <option value="deep">{t.serviceOptions.deep}</option>
             <option value="commercial">{t.serviceOptions.commercial}</option>
+            <option value="office">{t.serviceOptions.office}</option>
             <option value="moveInOut">{t.serviceOptions.moveInOut}</option>
+            <option value="postConstruction">{t.serviceOptions.postConstruction}</option>
             <option value="condo">{t.serviceOptions.condo}</option>
+            <option value="maintenance">{t.serviceOptions.maintenance}</option>
           </select>
           {errors.service && <p className="text-red-500 text-xs mt-1">{errors.service}</p>}
         </div>
@@ -242,9 +328,11 @@ export default function QuickQuoteForm({ language }: QuickQuoteFormProps) {
             type="text"
             id="zip"
             name="zip"
+            inputMode="numeric"
+            autoComplete="postal-code"
             value={formData.zip}
             onChange={handleChange}
-            className={`w-full px-4 py-3 rounded-lg border ${
+            className={`w-full px-4 py-3 rounded-lg border bg-white text-neutral-dark placeholder:text-neutral-light ${
               errors.zip ? "border-red-500" : "border-neutral-light"
             } focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all`}
             placeholder="28202"
@@ -252,6 +340,36 @@ export default function QuickQuoteForm({ language }: QuickQuoteFormProps) {
           />
           {errors.zip && <p className="text-red-500 text-xs mt-1">{errors.zip}</p>}
         </div>
+
+        {/* Square Footage */}
+        <div>
+          <label htmlFor="squareFootage" className="block text-sm font-medium text-neutral mb-1">
+            {t.fields.squareFootage}
+          </label>
+          <div className="relative">
+            <input
+              type="text"
+              id="squareFootage"
+              name="squareFootage"
+              inputMode="numeric"
+              value={formData.squareFootage}
+              onChange={handleChange}
+              className={`w-full px-4 py-3 pr-16 rounded-lg border bg-white text-neutral-dark placeholder:text-neutral-light ${
+                errors.squareFootage ? "border-red-500" : "border-neutral-light"
+              } focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all`}
+              placeholder="1500"
+            />
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-light text-sm font-medium">
+              sq ft
+            </span>
+          </div>
+          {errors.squareFootage && <p className="text-red-500 text-xs mt-1">{errors.squareFootage}</p>}
+        </div>
+
+        {/* Submit Error */}
+        {submitError && (
+          <p className="text-red-500 text-sm text-center">{t.submitError}</p>
+        )}
 
         {/* Submit Button */}
         <motion.button

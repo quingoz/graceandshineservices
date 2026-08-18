@@ -6,6 +6,7 @@ type Language = "en" | "es";
 
 interface MobileStickyCTAProps {
   language: Language;
+  onQuoteClick?: () => void;
 }
 
 const translations = {
@@ -21,11 +22,15 @@ const translations = {
   },
 };
 
-export default function MobileStickyCTA({ language }: MobileStickyCTAProps) {
+export default function MobileStickyCTA({ language, onQuoteClick }: MobileStickyCTAProps) {
   const t = translations[language];
 
   const handleQuoteClick = () => {
-    document.getElementById("quote-form")?.scrollIntoView({ behavior: "smooth" });
+    if (onQuoteClick) {
+      onQuoteClick();
+    } else {
+      document.getElementById("quote-form")?.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   return (

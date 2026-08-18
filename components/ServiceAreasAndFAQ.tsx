@@ -3,74 +3,64 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MapPin, ChevronDown, ChevronUp, CheckCircle } from "lucide-react";
+import { faqs } from "@/data/faqs";
 
 type Language = "en" | "es";
 
 interface ServiceAreasAndFAQProps {
   language: Language;
+  activeSection?: "all" | "areas" | "faq";
 }
 
 const translations = {
   en: {
-    areasTitle: "Service Areas",
-    areasSubtitle: "Proudly serving Charlotte, NC and surrounding communities",
+    areasTitle: "Areas We Serve",
+    areasEyebrow: "Service Areas",
+    areasSubtitle: "Our primary focus is Charlotte, NC and the nearby communities where we proudly provide our services.",
+    mapHeading: "Charlotte, NC & Surrounding Areas",
+    additionalNote: "Additional nearby areas may be available depending on service type, location, scheduling, and project scope.",
+    notListed: "Don't see your area listed?",
+    contactUs: "Contact us",
+    checkAvailability: "to check availability in your location.",
     faqTitle: "Frequently Asked Questions",
     faqSubtitle: "Find answers to common questions about our services",
   },
   es: {
-    areasTitle: "Áreas de Servicio",
-    areasSubtitle: "Orgullosamente sirviendo Charlotte, NC y comunidades circundantes",
+    areasTitle: "Áreas que Atendemos",
+    areasEyebrow: "Áreas de Servicio",
+    areasSubtitle: "Nuestro enfoque principal es Charlotte, NC y las comunidades cercanas donde ofrecemos con orgullo nuestros servicios.",
+    mapHeading: "Charlotte, NC y Áreas Circundantes",
+    additionalNote: "Es posible atender áreas cercanas adicionales según el tipo de servicio, la ubicación, la programación y el alcance del proyecto.",
+    notListed: "¿No ve su área en la lista?",
+    contactUs: "Contáctenos",
+    checkAvailability: "para verificar disponibilidad en su ubicación.",
     faqTitle: "Preguntas Frecuentes",
     faqSubtitle: "Encuentre respuestas a preguntas comunes sobre nuestros servicios",
   },
 };
 
 const serviceAreas = [
-  "Charlotte, NC",
-  "South Charlotte",
-  "Ballantyne",
-  "Myers Park",
-  "Dilworth",
-  "Elizabeth",
-  "Plaza Midwood",
-  "NoDa",
-  "University City",
-  "Huntersville",
-  "Cornelius",
-  "Davidson",
+  "Charlotte",
   "Matthews",
   "Mint Hill",
   "Pineville",
+  "Huntersville",
+  "Cornelius",
+  "Davidson",
+  "Indian Trail",
+  "Stallings",
+  "Waxhaw",
+  "Weddington",
+  "Monroe",
+  "Concord",
+  "Harrisburg",
+  "Kannapolis",
+  "Gastonia",
+  "Belmont",
+  "Mount Holly",
 ];
 
-const faqs = [
-  {
-    question: "Do you provide your own cleaning supplies and equipment?",
-    answer: "Yes, we bring all necessary cleaning supplies and professional-grade equipment to ensure the best results. We use high-quality, eco-friendly products that are safe for your family and pets.",
-  },
-  {
-    question: "Are you insured and licensed?",
-    answer: "Absolutely. Grace and Shine is fully insured and licensed for your peace of mind. We carry comprehensive liability insurance and workers' compensation coverage to protect your property and our team.",
-  },
-  {
-    question: "Do you offer recurring cleaning services?",
-    answer: "Yes, we offer flexible recurring cleaning schedules including weekly, bi-weekly, and monthly services. We can also customize a schedule to fit your specific needs and preferences.",
-  },
-  {
-    question: "Do you clean condominiums and managed properties?",
-    answer: "Yes, we specialize in condominium and HOA-managed property cleaning. Our team is experienced with the specific requirements and regulations of managed properties and works seamlessly with property managers.",
-  },
-  {
-    question: "What is your cancellation policy?",
-    answer: "We understand that plans change. Please provide at least 24 hours' notice for cancellations or rescheduling. Late cancellations may incur a fee. We're happy to work with you to find a convenient alternative time.",
-  },
-  {
-    question: "How do you handle special requests or specific areas of concern?",
-    answer: "We encourage you to share any special requests or areas that need extra attention. Our team is trained to adapt to your specific needs and will ensure your concerns are addressed during every visit.",
-  },
-];
-
-export default function ServiceAreasAndFAQ({ language }: ServiceAreasAndFAQProps) {
+export default function ServiceAreasAndFAQ({ language, activeSection = "all" }: ServiceAreasAndFAQProps) {
   const t = translations[language];
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
@@ -79,10 +69,10 @@ export default function ServiceAreasAndFAQ({ language }: ServiceAreasAndFAQProps
   };
 
   return (
-    <section className="py-20 bg-base" id="areas">
+    <section className="py-20 bg-base" id={activeSection === "faq" ? "faq" : "areas"}>
       <div className="max-w-7xl mx-auto px-4">
         {/* Service Areas */}
-        <div className="mb-20">
+        {activeSection !== "faq" && (<div className="mb-20">
           <motion.div
             className="text-center mb-12"
             initial={{ y: 20, opacity: 0 }}
@@ -90,6 +80,10 @@ export default function ServiceAreasAndFAQ({ language }: ServiceAreasAndFAQProps
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.5, ease: "easeOut" }}
           >
+            <div className="inline-flex items-center gap-2 bg-primary/5 border border-primary/10 rounded-full px-4 py-1.5 mb-4">
+              <MapPin className="w-4 h-4 text-primary" />
+              <span className="text-sm font-medium text-primary">{t.areasEyebrow}</span>
+            </div>
             <h2 className="font-montserrat text-4xl md:text-5xl font-bold text-primary mb-4">
               {t.areasTitle}
             </h2>
@@ -100,17 +94,20 @@ export default function ServiceAreasAndFAQ({ language }: ServiceAreasAndFAQProps
           </motion.div>
 
           {/* Visual Map Representation */}
-          <div className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-2xl p-8 mb-8 border border-accent/20">
-            <div className="flex items-center justify-center gap-2 mb-6">
+          <div className="bg-gradient-to-br from-primary via-primary to-primary-dark rounded-3xl p-8 md:p-10 mb-8 border border-accent/30 shadow-xl relative overflow-hidden">
+            {/* Decorative glow */}
+            <div className="absolute -top-20 -right-20 w-64 h-64 bg-accent/10 rounded-full blur-3xl" />
+
+            <div className="relative z-10 flex items-center justify-center gap-2 mb-8">
               <MapPin className="w-6 h-6 text-accent" />
-              <h3 className="font-montserrat text-2xl font-bold text-primary">
-                Charlotte, NC Metropolitan Area
+              <h3 className="font-montserrat text-2xl font-bold text-white text-center">
+                {t.mapHeading}
               </h3>
             </div>
 
             {/* Grid of Areas */}
             <motion.div 
-              className="grid grid-cols-3 sm:grid-cols-5 gap-3"
+              className="relative z-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3"
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-100px" }}
@@ -118,7 +115,7 @@ export default function ServiceAreasAndFAQ({ language }: ServiceAreasAndFAQProps
                 hidden: {},
                 visible: {
                   transition: {
-                    staggerChildren: 0.05,
+                    staggerChildren: 0.04,
                   },
                 },
               }}
@@ -131,25 +128,34 @@ export default function ServiceAreasAndFAQ({ language }: ServiceAreasAndFAQProps
                     visible: { y: 0, opacity: 1 },
                   }}
                   transition={{ duration: 0.4 }}
-                  className="bg-white rounded-lg px-3 py-2 text-center text-sm text-neutral border border-primary/20 hover:border-sky-400 hover:text-primary transition-colors cursor-default hover:scale-[1.01]"
+                  className="flex items-center justify-center gap-1.5 bg-white/10 backdrop-blur-sm rounded-full px-3 py-2.5 text-center text-sm font-medium text-white border border-white/20 hover:border-accent hover:bg-white/20 transition-all duration-200 cursor-default"
                 >
-                  {area}
+                  <MapPin className="w-3.5 h-3.5 text-accent flex-shrink-0" />
+                  <span>{area}</span>
                 </motion.div>
               ))}
             </motion.div>
+
+            {/* Additional Note */}
+            <p className="relative z-10 text-center text-neutral-surface text-sm mt-8 pt-6 border-t border-white/15 max-w-2xl mx-auto">
+              {t.additionalNote}
+            </p>
           </div>
 
           {/* Call to Action */}
           <div className="text-center">
-            <p className="text-neutral mb-4">
-              Don't see your area listed?{" "}
-              <span className="text-primary font-semibold">Contact us</span> to check availability in your location.
+            <p className="text-neutral">
+              {t.notListed}{" "}
+              <a href="/contact/" className="text-primary font-semibold hover:text-accent transition-colors">
+                {t.contactUs}
+              </a>{" "}
+              {t.checkAvailability}
             </p>
           </div>
-        </div>
+        </div>)}
 
         {/* FAQ Section */}
-        <div id="faq">
+        {activeSection !== "areas" && (<div id={activeSection === "all" ? "faq" : undefined}>
           <motion.div
             className="text-center mb-12"
             initial={{ y: 20, opacity: 0 }}
@@ -234,7 +240,7 @@ export default function ServiceAreasAndFAQ({ language }: ServiceAreasAndFAQProps
               </span>
             </div>
           </div>
-        </div>
+        </div>)}
       </div>
     </section>
   );

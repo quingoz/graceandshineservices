@@ -7,6 +7,7 @@ type Language = "en" | "es";
 
 interface FooterProps {
   language: Language;
+  onGetEstimate?: () => void;
 }
 
 const translations = {
@@ -15,7 +16,8 @@ const translations = {
     quickLinks: "Quick Links",
     contactInfo: "Contact Information",
     rights: "All rights reserved.",
-    insured: "Insured & Licensed",
+    insured: "Insured & Bonded",
+    insuredDescription: "Fully insured and bonded — Certificate of Insurance available upon request",
     backToTop: "Back to Top",
     links: {
       home: "Home",
@@ -31,7 +33,8 @@ const translations = {
     quickLinks: "Enlaces Rápidos",
     contactInfo: "Información de Contacto",
     rights: "Todos los derechos reservados.",
-    insured: "Asegurado y Licenciado",
+    insured: "Asegurado y Garantizado",
+    insuredDescription: "Totalmente asegurados y garantizados — Certificado de Seguro disponible a solicitud",
     backToTop: "Volver Arriba",
     links: {
       home: "Inicio",
@@ -44,7 +47,7 @@ const translations = {
   },
 };
 
-export default function Footer({ language }: FooterProps) {
+export default function Footer({ language, onGetEstimate }: FooterProps) {
   const t = translations[language];
 
   const scrollToTop = () => {
@@ -110,22 +113,22 @@ export default function Footer({ language }: FooterProps) {
               {t.quickLinks}
             </h3>
             <nav className="space-y-2">
-              <a href="#" className="block text-neutral-surface hover:text-accent transition-colors text-sm">
+              <a href="/" className="block text-neutral-surface hover:text-accent transition-colors text-sm">
                 {t.links.home}
               </a>
-              <a href="#about" className="block text-neutral-surface hover:text-accent transition-colors text-sm">
+              <a href="/about/" className="block text-neutral-surface hover:text-accent transition-colors text-sm">
                 {t.links.about}
               </a>
-              <a href="#services" className="block text-neutral-surface hover:text-accent transition-colors text-sm">
+              <a href="/services/" className="block text-neutral-surface hover:text-accent transition-colors text-sm">
                 {t.links.services}
               </a>
-              <a href="#areas" className="block text-neutral-surface hover:text-accent transition-colors text-sm">
+              <a href="/service-areas/" className="block text-neutral-surface hover:text-accent transition-colors text-sm">
                 {t.links.areas}
               </a>
-              <a href="#faq" className="block text-neutral-surface hover:text-accent transition-colors text-sm">
+              <a href="/faq/" className="block text-neutral-surface hover:text-accent transition-colors text-sm">
                 {t.links.faq}
               </a>
-              <a href="#contact" className="block text-neutral-surface hover:text-accent transition-colors text-sm">
+              <a href="/contact/" className="block text-neutral-surface hover:text-accent transition-colors text-sm">
                 {t.links.contact}
               </a>
             </nav>
@@ -144,13 +147,13 @@ export default function Footer({ language }: FooterProps) {
                   <span className="font-semibold text-white">{t.insured}</span>
                 </div>
                 <p className="text-xs text-neutral-surface">
-                  Fully insured and licensed for your peace of mind
+                  {t.insuredDescription}
                 </p>
               </div>
 
               {/* CTA Button */}
               <button
-                onClick={() => document.getElementById("quote-form")?.scrollIntoView({ behavior: "smooth" })}
+                onClick={onGetEstimate ? onGetEstimate : () => document.getElementById("quote-form")?.scrollIntoView({ behavior: "smooth" })}
                 className="w-full bg-accent hover:bg-accent-light text-primary-dark font-semibold px-6 py-3 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5"
               >
                 Get a Free Quote
